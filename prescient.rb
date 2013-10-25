@@ -24,14 +24,12 @@ module Prescient
     
     # Create a class-level fact - applies to all instances of the class
     def self.fact(sym, &block)
-      raise ArgumentError, "sym argument can't be nil" if sym.nil?
       @facts ||= {}
       @facts[sym] = (block or instance_method(sym))
     end
     
     # Create an instance-level fact - applies only to the instance
     def fact(sym, &block)
-      raise ArgumentError, "sym argument can't be nil" if sym.nil?
       @facts[sym] = (block or method(sym))
     end
     
