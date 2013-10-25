@@ -4,12 +4,15 @@ module Prescient
   
   class Studier
     
+    def initialize
+      @fact_weights = {}
+    end
+    
     def study(events)
-      for event in events
-        for name, fact in event.facts
-          p [name, fact.call]
-        end
-      end
+      # Pull in fact names from each event
+      events.each{ |e| e.facts.each{ |sym,_| @fact_weights[sym] ||= 0.0 } }
+
+      p @fact_weights
     end
     
   end
