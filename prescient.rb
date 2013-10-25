@@ -25,6 +25,7 @@ module Prescient
     end
     
     def fact(sym, &block)
+      raise ArgumentError, "sym argument can't be nil" if sym.nil?
       @facts[sym] = (block or method(sym))
     end
     

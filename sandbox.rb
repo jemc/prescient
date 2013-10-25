@@ -17,6 +17,8 @@ Studier.new.study [
     e.fact def e.youth
       (100 - facts[:age].call) / 100.0
     end
+    
+    e.fact nil
   }
   
 ]
