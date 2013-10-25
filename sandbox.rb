@@ -6,7 +6,7 @@ require 'pry'
 
 class MyEvent < Event
   fact def youth
-    (100 - facts[:age].call) / 100.0
+    (100 - get_fact(:age)) / 100.0
   end
 end
 

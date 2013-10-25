@@ -19,6 +19,7 @@ module Prescient
     
     def initialize
       @facts = {}
+      @cached_facts = {}
       yield self if block_given?
     end
     
@@ -42,6 +43,11 @@ module Prescient
       end].merge(@facts)
     end
     
+    # Return the result value of a specific fact
+    def get_fact(sym, use_cache:false)
+      (use_cache and @cached_facts[sym]) or \
+        (@cached_facts[sym] = facts[sym].call)
+    end
   end
   
 end
