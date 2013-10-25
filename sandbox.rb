@@ -1,7 +1,14 @@
 
 require_relative 'prescient'
+include Prescient
 
 require 'pry'
 
 
-puts Prescient
+Studier.new.study [
+  
+  Event.new { |e|
+    e.fact(:age) { 52 }
+  }
+  
+]
