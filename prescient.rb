@@ -6,8 +6,8 @@ module Prescient
     
     def study(events)
       for event in events
-        for fact in event.facts
-          p fact.name
+        for name, fact in event.facts
+          p [name, fact.call]
         end
       end
     end
@@ -20,19 +20,12 @@ module Prescient
     attr_reader :facts
     
     def initialize
-      @facts = []
+      @facts = {}
       yield self if block_given?
     end
     
     def fact(sym, &block)
-      fact = block or method(sym)
-      
-      unless fact.respond_to? :name
-        metafact = class << fact; self; end
-        metafact.send(:define_method, :name) { sym }
-      end
-        
-      @facts << fact unless @facts.include? fact
+      @facts[sym] = (block or method(sym))
     end
     
   end
