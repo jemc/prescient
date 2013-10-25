@@ -18,14 +18,15 @@ module Prescient
   class Event
     
     def initialize
-      # Initialize facts and gather class facts into instance facts
       @facts = {}
-      self.class.facts.each_pair do |sym, fact|
-        @facts[sym] = fact.bind(self) rescue NoMethodError
-      end if self.class.facts
-      
-      # Run the initialize block if given
       yield self if block_given?
+    end
+    
+    # Create a class-level fact - applies to all instances of the class
+    def self.fact(sym, &block)
+      raise ArgumentError, "sym argument can't be nil" if sym.nil?
+      @facts ||= {}
+      @facts[sym] = (block or instance_method(sym))
     end
     
     # Create an instance-level fact - applies only to the instance
@@ -33,15 +34,15 @@ module Prescient
       raise ArgumentError, "sym argument can't be nil" if sym.nil?
       @facts[sym] = (block or method(sym))
     end
-    attr_reader :facts
     
-    # Create a class-level fact - applies to all future instances of the class
-    def self.fact(sym, &block)
-      raise ArgumentError, "sym argument can't be nil" if sym.nil?
-      @facts ||= {}
-      @facts[sym] = (block or instance_method(sym))
+    # Return the hash of callable fact objects
+    def facts
+      # bind class-wide facts and merge with instance-wide facts
+      Hash[(self.class.instance_variable_get(:@facts) or {}).map do |k,v|
+        v = v.bind(self) rescue NoMethodError
+        [k, v]
+      end].merge(@facts)
     end
-    class << self; attr_reader :facts; end
     
   end
   
