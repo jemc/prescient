@@ -8,15 +8,16 @@ module Prescient
     
     def initialize
       @facet_weights = {}
-      @events = []
+      @datums = []
     end
     
-    def ingest(events)
+    def ingest(datums)
       # Pull in facet names from each event
-      events.each{ |e| 
-        @events << e unless @events.include? e
-        e.facets.each{ |sym,_| 
+      datums.each{ |d| 
+        @datums << d unless @datums.include? d
+        d.facets.each{ |sym,_| 
           @facet_weights[sym] ||= 0.0 } }
+      self
     end
     
   end
