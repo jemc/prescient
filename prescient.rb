@@ -4,15 +4,22 @@ module Prescient
   
   class Studier
     
+    attr_accessor :correlator
+    
     def initialize
-      @fact_weights = {}
+      @facet_weights = {}
     end
     
     def study(events)
-      # Pull in fact names from each event
-      events.each{ |e| e.facts.each{ |sym,_| @fact_weights[sym] ||= 0.0 } }
-
-      p @fact_weights
+      # Pull in facet names from each event
+      events.each{ |e| e.facets.each{ |sym,_| @facet_weights[sym] ||= 0.0 } }
+      
+      1000.times do
+        @facet_weights.keys.each do |k|
+          @facet_weights[k] = Random.rand
+        end
+        
+      end
     end
     
   end
@@ -21,35 +28,35 @@ module Prescient
   class Event
     
     def initialize
-      @facts = {}
-      @cached_facts = {}
+      @facets = {}
+      @cached_facets = {}
       yield self if block_given?
     end
     
-    # Create a class-level fact - applies to all instances of the class
-    def self.fact(sym, &block)
-      @facts ||= {}
-      @facts[sym] = (block or instance_method(sym))
+    # Create a class-level facet - applies to all instances of the class
+    def self.facet(sym, &block)
+      @facets ||= {}
+      @facets[sym] = (block or instance_method(sym))
     end
     
-    # Create an instance-level fact - applies only to the instance
-    def fact(sym, &block)
-      @facts[sym] = (block or method(sym))
+    # Create an instance-level facet - applies only to the instance
+    def facet(sym, &block)
+      @facets[sym] = (block or method(sym))
     end
     
-    # Return the hash of callable fact objects
-    def facts
-      # bind class-wide facts and merge with instance-wide facts
-      Hash[(self.class.instance_variable_get(:@facts) or {}).map do |k,v|
+    # Return the hash of callable facet objects
+    def facets
+      # bind class-wide facets and merge with instance-wide facets
+      Hash[(self.class.instance_variable_get(:@facets) or {}).map do |k,v|
         v = v.bind(self) rescue NoMethodError
         [k, v]
-      end].merge(@facts)
+      end].merge(@facets)
     end
     
-    # Return the result value of a specific fact
-    def get_fact(sym, use_cache:false)
-      (use_cache and @cached_facts[sym]) or \
-        (@cached_facts[sym] = facts[sym].call)
+    # Return the result value of a specific facet
+    def get_facet(sym, use_cache:false)
+      (use_cache and @cached_facets[sym]) or \
+        (@cached_facets[sym] = facets[sym].call)
     end
   end
   

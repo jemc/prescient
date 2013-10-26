@@ -5,23 +5,23 @@ include Prescient
 require 'pry'
 
 class MyEvent < Event
-  fact def youth
-    (100 - get_fact(:age)) / 100.0
+  facet def youth
+    (100 - get_facet(:age)) / 100.0
   end
 end
 
 Studier.new.study [
   
   MyEvent.new { |e|
-    e.fact(:age) { 52 }
+    e.facet(:age) { 52 }
   },
   
   MyEvent.new { |e|
-    e.fact(:age) { 2 }
+    e.facet(:age) { 2 }
   },
   
   Event.new { |e|
-    e.fact(:age) { 23 }
+    e.facet(:age) { 23 }
   }
   
 ]
