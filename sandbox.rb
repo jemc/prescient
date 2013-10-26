@@ -33,6 +33,13 @@ class PersonCorrelator < Correlator
     @datums.select{ |d| d.get_facet(chosen_facet) }
   end
   
+  def theorize_about(chosen_facet)
+    (@facet_weights.keys-[chosen_facet]).each do |f|
+      data = select_by(chosen_facet).map{|d| d.get_facet(f)}
+      p [f, data.max, data.min]
+    end
+  end
+  
 end
 
 corr = PersonCorrelator.new.ingest(
@@ -42,4 +49,4 @@ corr = PersonCorrelator.new.ingest(
   }
 end.to_a)
 
-p corr.select_by(:creaky_bones)
+p corr.theorize_about(:creaky_bones)

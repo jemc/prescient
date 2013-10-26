@@ -52,7 +52,7 @@ module Prescient
     end
     
     # Return the result value of a specific facet
-    def get_facet(sym, use_cache:false)
+    def get_facet(sym, use_cache:true)
       (use_cache and @cached_facets[sym]) or \
         (@cached_facets[sym] = facets[sym].call)
     end
