@@ -15,7 +15,11 @@ class Person < Datum
   
 end
 
-Correlator.new.study [
+class PersonCorrelator < Correlator
+  
+end
+
+PersonCorrelator.new.ingest [
   
   Person.new { |e|
     e.age = 52

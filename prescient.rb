@@ -8,18 +8,15 @@ module Prescient
     
     def initialize
       @facet_weights = {}
+      @events = []
     end
     
-    def study(events)
+    def ingest(events)
       # Pull in facet names from each event
-      events.each{ |e| e.facets.each{ |sym,_| @facet_weights[sym] ||= 0.0 } }
-      
-      1000.times do
-        @facet_weights.keys.each do |k|
-          @facet_weights[k] = Random.rand
-        end
-        
-      end
+      events.each{ |e| 
+        @events << e unless @events.include? e
+        e.facets.each{ |sym,_| 
+          @facet_weights[sym] ||= 0.0 } }
     end
     
   end
