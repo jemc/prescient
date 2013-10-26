@@ -25,7 +25,7 @@ module Prescient
   end
   
   
-  class Event
+  class Datum
     
     def initialize
       @facets = {}
