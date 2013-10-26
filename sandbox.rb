@@ -10,7 +10,7 @@ class MyEvent < Event
   end
 end
 
-Studier.new.study [
+Correlator.new.study [
   
   MyEvent.new { |e|
     e.facet(:age) { 52 }

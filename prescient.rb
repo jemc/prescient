@@ -2,7 +2,7 @@
 
 module Prescient
   
-  class Studier
+  class Correlator
     
     attr_accessor :correlator
     
